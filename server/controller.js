@@ -24,15 +24,15 @@ module.exports = {
 
             create table cities (
                 city_id serial primary key, 
-                name varchar,
-                rating int,
+                name varchar(150) NOT NULL,
+                rating int NOT NULL,
                 country_id int references countries(country_id)
             );
 
-            insert into cities (name)
-            values ('New York'),
-            ('Las Vegas'),
-            ('Salt Lake City');
+            insert into cities (name, rating, counrty_id)
+            values ('New York', 3, 187),
+            ('Las Vegas', 4, 187),
+            ('Salt Lake City', 4, 187);
 
             insert into countries (name)
             values ('Afghanistan'),
@@ -247,9 +247,10 @@ module.exports = {
     },
 
     createCity: (req,res) => {
+        let { name, rating, countryId } = req.body
         sequelize.query(`
-        INSERT INTO cities (city_id,name,rating,country_id)
-        
+        INSERT INTO cities (name,rating,country_id)
+        VALUES ('${name}',${rating},${countryId});
        `).then((dbRes) => {
             console.log(dbRes[0])
             res.status(200).send(dbRes[0])
@@ -263,6 +264,7 @@ module.exports = {
         FROM countries AS a
         JOIN cities AS b
         ON a.country_id = b.country_id
+        ORDER BY rating DESC;
         `).then((dbRes) => {
             console.log(dbRes[0])
             res.status(200).send(dbRes[0])
@@ -272,8 +274,7 @@ module.exports = {
 
     deleteCity: (req,res) => {
         sequelize.query(`
-        DELETE
-        FROM cities
+        DELETE FROM cities
         WHERE cities_id = ${cities_id} 
         `).then((dbRes) => {
             console.log(dbRes[0])
