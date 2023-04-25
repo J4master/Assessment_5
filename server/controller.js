@@ -260,7 +260,7 @@ module.exports = {
 
     getCities: (req,res) => {
         sequelize.query(`
-        SELECT a.country AS b.cities_id, b.name, b.rating
+        SELECT a.name AS b.city_id, b.name, b.rating
         FROM countries AS a
         JOIN cities AS b
         ON a.country_id = b.country_id
@@ -275,7 +275,7 @@ module.exports = {
     deleteCity: (req,res) => {
         sequelize.query(`
         DELETE FROM cities
-        WHERE cities_id = ${cities_id} 
+        WHERE city_id = ${city_id} 
         `).then((dbRes) => {
             console.log(dbRes[0])
             res.status(200).send(dbRes[0])
